@@ -2,6 +2,7 @@ package andras.ilonczai.wpbackend.services;
 
 import andras.ilonczai.wpbackend.dto.CredentialsDto;
 import andras.ilonczai.wpbackend.dto.UserDto;
+import andras.ilonczai.wpbackend.dtos.SignUpDto;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.UserMapper;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +32,20 @@ public class UserService {
         }
         throw new AppException("Invalid Password", HttpStatus.BAD_REQUEST);
 
+    }
+
+    public UserDto register(SignUpDto userDto) {
+        Optional<User> optionalUser = userRepository.findByLogin(userDto.login());
+
+        if (optionalUser.isPresent()) {
+            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userMapper.signUpToUser(userDto);
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
+
+        User savedUser = userRepository.save(user);
+
+        return userMapper.toUserDto(savedUser);
     }
 }
