@@ -1,4 +1,4 @@
-package andras.ilonczai.wpbackend.wpbackend.config;
+package andras.ilonczai.wpbackend.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

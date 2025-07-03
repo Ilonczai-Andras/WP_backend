@@ -1,4 +1,4 @@
-package andras.ilonczai.wpbackend.wpbackend;
+package andras.ilonczai.wpbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package andras.ilonczai.wpbackend.wpbackend.controllers;
+package andras.ilonczai.wpbackend.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
