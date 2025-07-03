@@ -1,7 +1,7 @@
 package andras.ilonczai.wpbackend.controllers;
 
-import andras.ilonczai.wpbackend.dto.CredentialsDto;
-import andras.ilonczai.wpbackend.dto.UserDto;
+import andras.ilonczai.wpbackend.dtos.CredentialsDto;
+import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.SignUpDto;
 import andras.ilonczai.wpbackend.services.UserService;
 import lombok.RequiredArgsConstructor;

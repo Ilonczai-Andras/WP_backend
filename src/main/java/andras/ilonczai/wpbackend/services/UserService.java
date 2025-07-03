@@ -1,7 +1,7 @@
 package andras.ilonczai.wpbackend.services;
 
-import andras.ilonczai.wpbackend.dto.CredentialsDto;
-import andras.ilonczai.wpbackend.dto.UserDto;
+import andras.ilonczai.wpbackend.dtos.CredentialsDto;
+import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.SignUpDto;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.exceptions.AppException;
@@ -34,15 +34,15 @@ public class UserService {
 
     }
 
-    public UserDto register(SignUpDto userDto) {
-        Optional<User> optionalUser = userRepository.findByLogin(userDto.login());
+    public UserDto register(SignUpDto signUpDto) {
+        Optional<User> optionalUser = userRepository.findByLogin(signUpDto.login());
 
         if (optionalUser.isPresent()) {
             throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
         }
 
-        User user = userMapper.signUpToUser(userDto);
-        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
+        User user = userMapper.signUpToUser(signUpDto);
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
 
         User savedUser = userRepository.save(user);
 

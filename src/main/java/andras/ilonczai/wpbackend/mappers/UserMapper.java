@@ -1,6 +1,6 @@
 package andras.ilonczai.wpbackend.mappers;
 
-import andras.ilonczai.wpbackend.dto.UserDto;
+import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.SignUpDto;
 import andras.ilonczai.wpbackend.entities.User;
 import org.mapstruct.Mapper;
