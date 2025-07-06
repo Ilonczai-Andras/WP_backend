@@ -1,5 +1,6 @@
 package andras.ilonczai.wpbackend.controllers;
 
+import andras.ilonczai.wpbackend.config.UserAuthProvider;
 import andras.ilonczai.wpbackend.dtos.CredentialsDto;
 import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.SignUpDto;
@@ -17,11 +18,13 @@ import java.net.URI;
 public class AuthController {
 
     private final UserService userService;
+    private final UserAuthProvider userAuthProvider;
 
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto)
     {
         UserDto user = userService.login(credentialsDto);
+        user.setToken(userAuthProvider.createToken(user));
         return ResponseEntity.ok(user);
     }
 
