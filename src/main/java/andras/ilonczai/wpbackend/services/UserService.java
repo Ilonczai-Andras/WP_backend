@@ -4,6 +4,8 @@ import andras.ilonczai.wpbackend.dtos.CredentialsDto;
 import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.SignUpDto;
 import andras.ilonczai.wpbackend.entities.User;
+import andras.ilonczai.wpbackend.entities.UserProfile;
+import andras.ilonczai.wpbackend.entities.UserStats;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.UserMapper;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -24,7 +27,6 @@ public class UserService {
     private final UserMapper userMapper;
 
     public UserDto login(CredentialsDto credentialsDto){
-        System.out.println("Trying to find user with username: " + credentialsDto.userName());
 
         User user = userRepository.findByUserName(credentialsDto.userName())
                 .orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
@@ -46,13 +48,28 @@ public class UserService {
         User user = userMapper.signUpToUser(signUpDto);
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
 
+        UserProfile profile = UserProfile.builder()
+                .user(user)
+                .joinedAt(LocalDateTime.now())
+                .description("")
+                .build();
+
+        UserStats stats = UserStats.builder()
+                .user(user)
+                .followerCount(0)
+                .storyCount(0)
+                .readCount(0)
+                .build();
+
+        user.setProfile(profile);
+        user.setStats(stats);
         User savedUser = userRepository.save(user);
 
         return userMapper.toUserDto(savedUser);
     }
 
-    public UserDto findByUserName(String UserName) {
-        User user = userRepository.findByUserName(UserName)
+    public UserDto findById(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
         return userMapper.toUserDto(user);
     }

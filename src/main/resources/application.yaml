@@ -8,3 +8,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+security:
+  jwt:
+    token:
+      secret-key: 3a9549b04f78c0c00561bf67f6d60fb127c5008d

@@ -20,7 +20,7 @@ public class AuthController {
     private final UserService userService;
     private final UserAuthProvider userAuthProvider;
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto)
     {
         UserDto user = userService.login(credentialsDto);
@@ -28,7 +28,7 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
         UserDto user = userService.register(signUpDto);
         return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);

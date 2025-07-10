@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((request) -> request.requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                .authorizeHttpRequests((request) -> request.requestMatchers(HttpMethod.POST, "/api/login", "/api/register").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

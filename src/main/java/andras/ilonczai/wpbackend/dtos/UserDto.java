@@ -1,5 +1,7 @@
 package andras.ilonczai.wpbackend.dtos;
 
+import andras.ilonczai.wpbackend.entities.UserProfile;
+import andras.ilonczai.wpbackend.entities.UserStats;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +17,6 @@ public class UserDto {
     private String lastName;
     private String userName;
     private String token;
+    private UserProfile userProfile;
+    private UserStats userStats;
 }

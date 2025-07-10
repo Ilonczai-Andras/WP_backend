@@ -28,7 +28,7 @@ public class UserAuthProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        secretKey = secretKey.trim();
     }
 
     public String createToken(UserDto user) {
@@ -37,11 +37,12 @@ public class UserAuthProvider {
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
-                .withSubject(user.getUserName())
+                .withSubject(user.getId().toString())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .withClaim("firstName", user.getFirstName())
                 .withClaim("lastName", user.getLastName())
+                .withClaim("userName", user.getUserName())
                 .sign(algorithm);
     }
 
@@ -54,9 +55,10 @@ public class UserAuthProvider {
         DecodedJWT decoded = verifier.verify(token);
 
         UserDto user = UserDto.builder()
-                .userName(decoded.getSubject())
+                .id(Long.parseLong(decoded.getSubject()))
                 .firstName(decoded.getClaim("firstName").asString())
                 .lastName(decoded.getClaim("lastName").asString())
+                .userName(decoded.getClaim("userName").asString())
                 .build();
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
@@ -70,7 +72,8 @@ public class UserAuthProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = userService.findByUserName(decoded.getSubject());
+        Long userId = Long.parseLong(decoded.getSubject());
+        UserDto user = userService.findById(userId);
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }
