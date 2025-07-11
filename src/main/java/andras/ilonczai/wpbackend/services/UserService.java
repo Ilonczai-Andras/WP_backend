@@ -9,6 +9,7 @@ import andras.ilonczai.wpbackend.mappers.UserMapper;
 import andras.ilonczai.wpbackend.repositories.UserProfileRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
 import andras.ilonczai.wpbackend.repositories.UserStatsRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,5 +78,13 @@ public class UserService {
                         .readCount(stats.getReadCount())
                         .build() : null)
                 .build();
+    }
+
+    public UserProfile updateDescription(Long id, UpdateDescriptionRequestDto updateDescriptionRequestDto){
+        UserProfile userProfile = userProfileRepository.findById(id)
+                .orElseThrow(() -> new AppException("UserProfile not found for userId: " + id, HttpStatus.NOT_FOUND));
+
+        userProfile.setDescription(updateDescriptionRequestDto.description());
+        return userProfileRepository.save(userProfile);
     }
 }
