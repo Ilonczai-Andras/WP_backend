@@ -1,0 +1,13 @@
+package andras.ilonczai.wpbackend.dtos;
+
+import lombok.Builder;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Builder
+@Data
+public class UserProfileDto {
+    private String description;
+    private LocalDateTime joinedAt;
+}

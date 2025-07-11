@@ -1,14 +1,14 @@
 package andras.ilonczai.wpbackend.services;
 
-import andras.ilonczai.wpbackend.dtos.CredentialsDto;
-import andras.ilonczai.wpbackend.dtos.UserDto;
-import andras.ilonczai.wpbackend.dtos.SignUpDto;
+import andras.ilonczai.wpbackend.dtos.*;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.entities.UserProfile;
 import andras.ilonczai.wpbackend.entities.UserStats;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.UserMapper;
+import andras.ilonczai.wpbackend.repositories.UserProfileRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
+import andras.ilonczai.wpbackend.repositories.UserStatsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +23,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
+    private final UserStatsRepository userStatsRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
@@ -48,21 +50,6 @@ public class UserService {
         User user = userMapper.signUpToUser(signUpDto);
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
 
-        UserProfile profile = UserProfile.builder()
-                .user(user)
-                .joinedAt(LocalDateTime.now())
-                .description("")
-                .build();
-
-        UserStats stats = UserStats.builder()
-                .user(user)
-                .followerCount(0)
-                .storyCount(0)
-                .readCount(0)
-                .build();
-
-        user.setProfile(profile);
-        user.setStats(stats);
         User savedUser = userRepository.save(user);
 
         return userMapper.toUserDto(savedUser);
@@ -70,7 +57,25 @@ public class UserService {
 
     public UserDto findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
-        return userMapper.toUserDto(user);
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserProfile profile = userProfileRepository.findById(id).orElse(null);
+        UserStats stats = userStatsRepository.findById(id).orElse(null);
+
+        return UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .userName(user.getUserName())
+                .profile(profile != null ? UserProfileDto.builder()
+                        .description(profile.getDescription())
+                        .joinedAt(profile.getJoinedAt())
+                        .build() : null)
+                .stats(stats != null ? UserStatsDto.builder()
+                        .followerCount(stats.getFollowerCount())
+                        .storyCount(stats.getStoryCount())
+                        .readCount(stats.getReadCount())
+                        .build() : null)
+                .build();
     }
 }
