@@ -10,4 +10,7 @@ import java.time.LocalDateTime;
 public class UserProfileDto {
     private String description;
     private LocalDateTime joinedAt;
+    private String gender;
+    private String website;
+    private String location;
 }

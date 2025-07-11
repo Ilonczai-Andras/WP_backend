@@ -28,4 +28,13 @@ public class UserProfile {
 
     @Column(name = "joined_at", nullable = false)
     private LocalDateTime joinedAt;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "website")
+    private String website;
+
+    @Column(name = "location")
+    private String location;
 }

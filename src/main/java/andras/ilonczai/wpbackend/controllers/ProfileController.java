@@ -1,6 +1,6 @@
 package andras.ilonczai.wpbackend.controllers;
 
-import andras.ilonczai.wpbackend.dtos.UpdateDescriptionRequestDto;
+import andras.ilonczai.wpbackend.dtos.AboutDto;
 import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.entities.UserProfile;
 import andras.ilonczai.wpbackend.services.UserService;
@@ -21,9 +21,9 @@ public class ProfileController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/api/user-profiles/{id}/description")
-    public ResponseEntity<?> updateDescription(@Valid @PathVariable Long id, @RequestBody UpdateDescriptionRequestDto updateDescriptionRequestDto){
-        UserProfile userProfile = userService.updateDescription(id, updateDescriptionRequestDto);
+    @PutMapping("/api/user/about/{id}")
+    public ResponseEntity<?> updateUserProfile(@Valid @PathVariable Long id, @RequestBody AboutDto aboutDto){
+        UserProfile userProfile = userService.updateDescription(id, aboutDto);
         return ResponseEntity.ok(userProfile);
     }
 }

@@ -9,14 +9,12 @@ import andras.ilonczai.wpbackend.mappers.UserMapper;
 import andras.ilonczai.wpbackend.repositories.UserProfileRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
 import andras.ilonczai.wpbackend.repositories.UserStatsRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -71,6 +69,9 @@ public class UserService {
                 .Userprofile(profile != null ? UserProfileDto.builder()
                         .description(profile.getDescription())
                         .joinedAt(profile.getJoinedAt())
+                        .gender(profile.getGender())
+                        .website(profile.getWebsite())
+                        .location((profile.getLocation()))
                         .build() : null)
                 .Userstats(stats != null ? UserStatsDto.builder()
                         .followerCount(stats.getFollowerCount())
@@ -80,11 +81,14 @@ public class UserService {
                 .build();
     }
 
-    public UserProfile updateDescription(Long id, UpdateDescriptionRequestDto updateDescriptionRequestDto){
+    public UserProfile updateDescription(Long id, AboutDto aboutDto){
         UserProfile userProfile = userProfileRepository.findById(id)
                 .orElseThrow(() -> new AppException("UserProfile not found for userId: " + id, HttpStatus.NOT_FOUND));
 
-        userProfile.setDescription(updateDescriptionRequestDto.description());
+        userProfile.setDescription(aboutDto.description());
+        userProfile.setGender(aboutDto.gender());
+        userProfile.setWebsite(aboutDto.website());
+        userProfile.setLocation(aboutDto.location());
         return userProfileRepository.save(userProfile);
     }
 }
