@@ -81,7 +81,7 @@ public class UserService {
                 .build();
     }
 
-    public UserProfile updateDescription(Long id, AboutDto aboutDto){
+    public UserProfileDto updateUserProfile(Long id, AboutDto aboutDto){
         UserProfile userProfile = userProfileRepository.findById(id)
                 .orElseThrow(() -> new AppException("UserProfile not found for userId: " + id, HttpStatus.NOT_FOUND));
 
@@ -89,6 +89,8 @@ public class UserService {
         userProfile.setGender(aboutDto.gender());
         userProfile.setWebsite(aboutDto.website());
         userProfile.setLocation(aboutDto.location());
-        return userProfileRepository.save(userProfile);
+
+        UserProfile savedUserProfile = userProfileRepository.save(userProfile);
+        return userMapper.toUserProfileDto(savedUserProfile);
     }
 }
