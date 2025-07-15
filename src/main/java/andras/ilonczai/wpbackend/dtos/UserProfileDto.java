@@ -13,4 +13,5 @@ public class UserProfileDto {
     private String gender;
     private String website;
     private String location;
+    private String imageUrl;
 }

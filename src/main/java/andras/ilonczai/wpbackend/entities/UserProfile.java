@@ -37,4 +37,7 @@ public class UserProfile {
 
     @Column(name = "location")
     private String location;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }

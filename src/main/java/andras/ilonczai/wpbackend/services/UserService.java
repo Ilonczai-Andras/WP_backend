@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -49,6 +50,25 @@ public class UserService {
         User user = userMapper.signUpToUser(signUpDto);
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
 
+        UserStats userStats = UserStats.builder()
+                .user(user)
+                .followerCount(0)
+                .storyCount(0)
+                .readCount(0)
+                .build();
+
+        UserProfile userProfile = UserProfile.builder()
+                .user(user)
+                .description("")
+                .joinedAt(LocalDateTime.now())
+                .gender("")
+                .website("")
+                .location("")
+                .imageUrl("")
+                .build();
+
+        userStatsRepository.save(userStats);
+        userProfileRepository.save(userProfile);
         User savedUser = userRepository.save(user);
 
         return userMapper.toUserDto(savedUser);
@@ -56,7 +76,7 @@ public class UserService {
 
     public UserDto findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
         UserProfile profile = userProfileRepository.findById(id).orElse(null);
         UserStats stats = userStatsRepository.findById(id).orElse(null);
@@ -66,18 +86,8 @@ public class UserService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .userName(user.getUserName())
-                .Userprofile(profile != null ? UserProfileDto.builder()
-                        .description(profile.getDescription())
-                        .joinedAt(profile.getJoinedAt())
-                        .gender(profile.getGender())
-                        .website(profile.getWebsite())
-                        .location((profile.getLocation()))
-                        .build() : null)
-                .Userstats(stats != null ? UserStatsDto.builder()
-                        .followerCount(stats.getFollowerCount())
-                        .storyCount(stats.getStoryCount())
-                        .readCount(stats.getReadCount())
-                        .build() : null)
+                .userProfileDto(profile != null ? userMapper.toUserProfileDto(profile) : null)
+                .userStatsDto(stats != null ? userMapper.toUserStatsDto(stats) : null)
                 .build();
     }
 

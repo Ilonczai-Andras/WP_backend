@@ -17,6 +17,6 @@ public class UserDto {
     private String lastName;
     private String userName;
     private String token;
-    private UserProfileDto Userprofile;
-    private UserStatsDto Userstats;
+    private UserProfileDto userProfileDto;
+    private UserStatsDto userStatsDto;
 }
