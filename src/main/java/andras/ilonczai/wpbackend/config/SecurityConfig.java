@@ -29,7 +29,6 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/user/about/{id}").authenticated()
                         .anyRequest().authenticated()
                 );
         return http.build();

@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.CharBuffer;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserStatsRepository userStatsRepository;
+    private final CloudinaryService cloudinaryService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
@@ -102,5 +105,21 @@ public class UserService {
 
         UserProfile savedUserProfile = userProfileRepository.save(userProfile);
         return userMapper.toUserProfileDto(savedUserProfile);
+    }
+
+    public String uploadProfileImage(Long id, MultipartFile file){
+        try {
+            String imageUrl = cloudinaryService.uploadProfileImage(file);
+
+            UserProfile profile = userProfileRepository.findById(id)
+                    .orElseThrow(() -> new AppException("UserProfile not found for userId: " + id, HttpStatus.NOT_FOUND));
+
+            profile.setImageUrl(imageUrl);
+            userProfileRepository.save(profile);
+            return imageUrl;
+        }
+        catch (IOException e) {
+            throw new AppException("Image upload failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
