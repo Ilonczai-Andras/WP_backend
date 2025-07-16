@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -21,6 +23,18 @@ public class ProfileController {
     public ResponseEntity<UserDto> getUser(@PathVariable Long id){
         UserDto user = userService.findById(id);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserDto> getUserByUserName(@PathVariable String username){
+        UserDto user = userService.findByUserName(username);
+        return  ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String query){
+        List<UserDto> users = userService.searchUsers(query);
+        return  ResponseEntity.ok(users);
     }
 
     @PutMapping("/about/{id}")

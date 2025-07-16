@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -121,5 +122,31 @@ public class UserService {
         catch (IOException e) {
             throw new AppException("Image upload failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public List<UserDto> searchUsers(String query) {
+        List<User> users = userRepository.findByUserNameContainingIgnoreCase(query);
+        return users.stream()
+                .map(userMapper::toUserDto)
+                .toList();
+    }
+
+    public UserDto findByUserName(String userName){
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException("There is no user by this username", HttpStatus.NOT_FOUND));
+
+        UserDto userDto = userMapper.toUserDto(user);
+
+        UserProfile profile = userProfileRepository.findById(userDto.getId()).orElse(null);
+        UserStats stats = userStatsRepository.findById(userDto.getId()).orElse(null);
+
+        return UserDto.builder()
+                .id(userDto.getId())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .userName(userDto.getUserName())
+                .userProfileDto(profile != null ? userMapper.toUserProfileDto(profile) : null)
+                .userStatsDto(stats != null ? userMapper.toUserStatsDto(stats) : null)
+                .build();
     }
 }
