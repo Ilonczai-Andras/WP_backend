@@ -5,9 +5,11 @@ import andras.ilonczai.wpbackend.dtos.FollowResponseDto;
 import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.entities.Follow;
 import andras.ilonczai.wpbackend.entities.User;
+import andras.ilonczai.wpbackend.entities.UserProfile;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.FollowMapper;
 import andras.ilonczai.wpbackend.repositories.FollowRepository;
+import andras.ilonczai.wpbackend.repositories.UserProfileRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
     private final FollowMapper followMapper;
 
     public void followUser(Long followerId, Long followedId) {
@@ -49,7 +52,12 @@ public class FollowService {
         List<Follow> follows = followRepository.findByFollowed(user);
 
         List<FollowResponseDto> followers = follows.stream()
-                .map(followMapper::toFollowersResponseDto)
+                .map(follow -> {
+                    FollowResponseDto dto = followMapper.toFollowersResponseDto(follow);
+                    UserProfile profile = userProfileRepository.findById(dto.getId()).orElse(null);
+                    dto.setImgUrl(profile.getImageUrl());
+                return dto;
+                })
                 .toList();
 
         return FollowDto.builder()
@@ -73,10 +81,14 @@ public class FollowService {
                 .orElseThrow(() -> new AppException("No user found with this id: " + userId, HttpStatus.NOT_FOUND));
 
         List<Follow> follows = followRepository.findByFollower(user);
-        System.out.println(follows);
 
         List<FollowResponseDto> following = follows.stream()
-                .map(followMapper::toFollowingResponseDto)
+                .map(follow -> {
+                    FollowResponseDto dto = followMapper.toFollowingResponseDto(follow);
+                    UserProfile profile = userProfileRepository.findById(dto.getId()).orElse(null);
+                    dto.setImgUrl(profile.getImageUrl());
+                return dto;
+                })
                 .toList();
 
         return FollowDto.builder()
