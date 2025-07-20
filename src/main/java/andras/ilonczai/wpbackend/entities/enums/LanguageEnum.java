@@ -1,5 +1,8 @@
 package andras.ilonczai.wpbackend.entities.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum LanguageEnum {
     POLSKI("pl"),
     ARABIC("ar"),
@@ -32,10 +35,6 @@ public enum LanguageEnum {
 
     LanguageEnum(String code) {
         this.code = code;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public String getName() {
