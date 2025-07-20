@@ -1,6 +1,6 @@
 package andras.ilonczai.wpbackend.mappers;
 
-import andras.ilonczai.wpbackend.dtos.FollowResponseDto;
+import andras.ilonczai.wpbackend.dtos.Follow.FollowResponseDto;
 import andras.ilonczai.wpbackend.entities.Follow;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

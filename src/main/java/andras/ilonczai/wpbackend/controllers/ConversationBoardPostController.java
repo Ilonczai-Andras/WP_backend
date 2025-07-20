@@ -1,7 +1,7 @@
 package andras.ilonczai.wpbackend.controllers;
 
-import andras.ilonczai.wpbackend.dtos.ConversationBoardPostResponseDto;
-import andras.ilonczai.wpbackend.dtos.CreateConversationBoardPostRequestDto;
+import andras.ilonczai.wpbackend.dtos.ConversationBoardPost.ConversationBoardPostResponseDto;
+import andras.ilonczai.wpbackend.dtos.ConversationBoardPost.CreateConversationBoardPostRequestDto;
 import andras.ilonczai.wpbackend.services.ConversationBoardPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

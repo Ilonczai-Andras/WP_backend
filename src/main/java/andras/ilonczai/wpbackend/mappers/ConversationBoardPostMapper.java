@@ -1,6 +1,6 @@
 package andras.ilonczai.wpbackend.mappers;
 
-import andras.ilonczai.wpbackend.dtos.ConversationBoardPostResponseDto;
+import andras.ilonczai.wpbackend.dtos.ConversationBoardPost.ConversationBoardPostResponseDto;
 import andras.ilonczai.wpbackend.entities.ConversationBoardPost;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

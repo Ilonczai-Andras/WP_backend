@@ -1,9 +1,9 @@
 package andras.ilonczai.wpbackend.controllers;
 
 import andras.ilonczai.wpbackend.config.UserAuthProvider;
-import andras.ilonczai.wpbackend.dtos.CredentialsDto;
+import andras.ilonczai.wpbackend.dtos.Auth.CredentialsDto;
 import andras.ilonczai.wpbackend.dtos.UserDto;
-import andras.ilonczai.wpbackend.dtos.SignUpDto;
+import andras.ilonczai.wpbackend.dtos.Auth.SignUpDto;
 import andras.ilonczai.wpbackend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

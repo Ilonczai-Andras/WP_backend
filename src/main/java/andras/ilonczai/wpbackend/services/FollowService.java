@@ -1,8 +1,7 @@
 package andras.ilonczai.wpbackend.services;
 
-import andras.ilonczai.wpbackend.dtos.FollowDto;
-import andras.ilonczai.wpbackend.dtos.FollowResponseDto;
-import andras.ilonczai.wpbackend.dtos.UserDto;
+import andras.ilonczai.wpbackend.dtos.Follow.FollowDto;
+import andras.ilonczai.wpbackend.dtos.Follow.FollowResponseDto;
 import andras.ilonczai.wpbackend.entities.Follow;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.entities.UserProfile;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

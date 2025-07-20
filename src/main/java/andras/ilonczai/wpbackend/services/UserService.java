@@ -1,6 +1,9 @@
 package andras.ilonczai.wpbackend.services;
 
 import andras.ilonczai.wpbackend.dtos.*;
+import andras.ilonczai.wpbackend.dtos.Auth.CredentialsDto;
+import andras.ilonczai.wpbackend.dtos.Auth.SignUpDto;
+import andras.ilonczai.wpbackend.dtos.Profile.AboutDto;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.entities.UserProfile;
 import andras.ilonczai.wpbackend.entities.UserStats;

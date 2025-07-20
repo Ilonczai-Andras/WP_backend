@@ -1,6 +1,6 @@
 package andras.ilonczai.wpbackend.controllers;
 
-import andras.ilonczai.wpbackend.dtos.AboutDto;
+import andras.ilonczai.wpbackend.dtos.Profile.AboutDto;
 import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.UserProfileDto;
 import andras.ilonczai.wpbackend.services.UserService;

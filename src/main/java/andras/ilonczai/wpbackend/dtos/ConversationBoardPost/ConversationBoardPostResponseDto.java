@@ -1,4 +1,4 @@
-package andras.ilonczai.wpbackend.dtos;
+package andras.ilonczai.wpbackend.dtos.ConversationBoardPost;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

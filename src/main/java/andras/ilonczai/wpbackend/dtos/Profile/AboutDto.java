@@ -1,4 +1,4 @@
-package andras.ilonczai.wpbackend.dtos;
+package andras.ilonczai.wpbackend.dtos.Profile;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

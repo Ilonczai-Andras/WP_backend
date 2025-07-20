@@ -1,4 +1,4 @@
-package andras.ilonczai.wpbackend.dtos;
+package andras.ilonczai.wpbackend.dtos.Auth;
 
 public record CredentialsDto(String userName, String password) {
 }

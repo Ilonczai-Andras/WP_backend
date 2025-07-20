@@ -1,7 +1,7 @@
 package andras.ilonczai.wpbackend.services;
 
-import andras.ilonczai.wpbackend.dtos.ConversationBoardPostResponseDto;
-import andras.ilonczai.wpbackend.dtos.CreateConversationBoardPostRequestDto;
+import andras.ilonczai.wpbackend.dtos.ConversationBoardPost.ConversationBoardPostResponseDto;
+import andras.ilonczai.wpbackend.dtos.ConversationBoardPost.CreateConversationBoardPostRequestDto;
 import andras.ilonczai.wpbackend.entities.ConversationBoardPost;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.exceptions.AppException;

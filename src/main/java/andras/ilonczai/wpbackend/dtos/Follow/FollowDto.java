@@ -1,6 +1,5 @@
-package andras.ilonczai.wpbackend.dtos;
+package andras.ilonczai.wpbackend.dtos.Follow;
 
-import andras.ilonczai.wpbackend.entities.Follow;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

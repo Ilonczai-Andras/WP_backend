@@ -1,13 +1,10 @@
 package andras.ilonczai.wpbackend.controllers;
 
-import andras.ilonczai.wpbackend.dtos.FollowDto;
-import andras.ilonczai.wpbackend.entities.User;
+import andras.ilonczai.wpbackend.dtos.Follow.FollowDto;
 import andras.ilonczai.wpbackend.services.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
