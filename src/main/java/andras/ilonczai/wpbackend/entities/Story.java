@@ -19,6 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "stories")
 public class Story {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -77,3 +78,4 @@ public class Story {
         updatedAt = LocalDateTime.now();
     }
 }
+
