@@ -22,7 +22,7 @@ public class StoryController {
     public ResponseEntity<StoryResponseDto> createStory(
             @PathVariable Long userId,
             @RequestPart("req") StoryRequestDto req,
-            @RequestPart("file") MultipartFile file) {
+            @RequestPart(value = "file", required = false) MultipartFile file) {
 
         return ResponseEntity.ok(storyService.createStory(userId, req, file));
     }

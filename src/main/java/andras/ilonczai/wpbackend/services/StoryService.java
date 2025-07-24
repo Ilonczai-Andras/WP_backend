@@ -33,7 +33,9 @@ public class StoryService {
                     .orElseThrow(() -> new AppException("No user found with this id: " + userId, HttpStatus.NOT_FOUND));
 
             try {
-                imageUrl = cloudinaryService.uploadProfileImage(file);
+                if(file != null) {
+                    imageUrl = cloudinaryService.uploadProfileImage(file);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

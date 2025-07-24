@@ -27,7 +27,7 @@ public class Story {
     @Column(nullable = false, length = 255)
     private String title;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private List<String> mainCharacters;
