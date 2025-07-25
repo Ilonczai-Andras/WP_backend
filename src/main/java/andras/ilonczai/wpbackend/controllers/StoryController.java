@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/stories")
 @RequiredArgsConstructor
@@ -25,5 +27,15 @@ public class StoryController {
             @RequestPart(value = "file", required = false) MultipartFile file) {
 
         return ResponseEntity.ok(storyService.createStory(userId, req, file));
+    }
+
+    @GetMapping("/{authorId}/stories")
+    public ResponseEntity<List<StoryResponseDto>> getStories(@PathVariable Long authorId){
+        return ResponseEntity.ok(storyService.getStories(authorId));
+    }
+
+    @GetMapping("/{storyId}/story")
+    public ResponseEntity<StoryResponseDto> getStory(@PathVariable Long storyId){
+        return ResponseEntity.ok(storyService.getStory(storyId));
     }
 }
