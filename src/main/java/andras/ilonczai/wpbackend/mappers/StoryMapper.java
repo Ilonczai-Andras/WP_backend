@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 public interface StoryMapper {
 
     @Mapping(target = "authorUsername", expression = "java(story.getAuthor().getUserName())")
-    @Mapping(target = "authorImg", expression = "java(story.getCoverImageUrl())")
     @Mapping(target = "coverImageUrl", expression = "java(story.getCoverImageUrl())")
     StoryResponseDto toStoryResponseDto(Story story);
 }

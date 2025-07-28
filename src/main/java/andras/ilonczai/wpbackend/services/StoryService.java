@@ -2,12 +2,14 @@ package andras.ilonczai.wpbackend.services;
 
 import andras.ilonczai.wpbackend.dtos.Story.StoryRequestDto;
 import andras.ilonczai.wpbackend.dtos.Story.StoryResponseDto;
+import andras.ilonczai.wpbackend.entities.Chapter;
 import andras.ilonczai.wpbackend.entities.Story;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.entities.UserProfile;
 import andras.ilonczai.wpbackend.entities.enums.StoryStatusEnum;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.StoryMapper;
+import andras.ilonczai.wpbackend.repositories.ChapterRepository;
 import andras.ilonczai.wpbackend.repositories.StoryRepository;
 import andras.ilonczai.wpbackend.repositories.UserProfileRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
@@ -26,7 +28,7 @@ public class StoryService {
 
         private final UserRepository userRepository;
         private final StoryRepository storyRepository;
-        private final UserProfileRepository userProfileRepository;
+        private final ChapterRepository chapterRepository;
         private final StoryMapper storyMapper;
         private final CloudinaryService cloudinaryService;
 
@@ -59,6 +61,15 @@ public class StoryService {
                     .build();
 
             Story savedStory = storyRepository.save(story);
+
+            Chapter chapter = Chapter.builder()
+                    .title("Untitled Part 1")
+                    .content("Untitled content")
+                    .chapterOrder(1)
+                    .story(savedStory)
+                    .build();
+            Chapter savedchapter = chapterRepository.save(chapter);
+            System.out.println(savedchapter);
             return storyMapper.toStoryResponseDto(savedStory);
         }
 
