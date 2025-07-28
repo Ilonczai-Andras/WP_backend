@@ -1,5 +1,6 @@
 package andras.ilonczai.wpbackend.dtos.Story;
 
+import andras.ilonczai.wpbackend.dtos.Chapter.ChapterResponseDto;
 import andras.ilonczai.wpbackend.entities.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +25,10 @@ public class StoryResponseDto {
     LanguageEnum language;
     CopyrightLicenseEnum copyright;
     boolean mature;
+    List<ChapterResponseDto> chapters;
     String coverImageUrl;
     String authorUsername;
+    Long authorId;
     StoryStatusEnum status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
