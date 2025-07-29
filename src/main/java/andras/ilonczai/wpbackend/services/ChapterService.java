@@ -1,5 +1,6 @@
 package andras.ilonczai.wpbackend.services;
 
+import andras.ilonczai.wpbackend.dtos.Chapter.ChapterRequestDto;
 import andras.ilonczai.wpbackend.dtos.Chapter.ChapterResponseDto;
 import andras.ilonczai.wpbackend.entities.Chapter;
 import andras.ilonczai.wpbackend.exceptions.AppException;
@@ -21,7 +22,22 @@ public class ChapterService {
                 .orElseThrow(() -> new AppException("No chapter found with this id: " + chapterId, HttpStatus.NOT_FOUND));
 
         ChapterResponseDto dto = chapterMapper.toChapterResponseDto(chapter);
-        System.out.println(dto);
         return dto;
+    }
+
+    public ChapterResponseDto updateChapter(Long chapterId, ChapterRequestDto req){
+        Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new AppException("No chapter found with this id: " + chapterId, HttpStatus.NOT_FOUND));
+
+        chapter.setTitle(req.title());
+        chapter.setContent(req.content());
+
+        chapter.setPublished(req.isPublished());
+        chapter.setPublishDate(req.publishDate());
+
+        chapter.setAuthorNotes(req.authorNotes());
+
+        Chapter savedChapter = chapterRepository.save(chapter);
+        return chapterMapper.toChapterResponseDto(savedChapter);
     }
 }
