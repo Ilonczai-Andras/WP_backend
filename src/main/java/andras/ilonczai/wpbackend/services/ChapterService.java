@@ -21,6 +21,7 @@ public class ChapterService {
                 .orElseThrow(() -> new AppException("No chapter found with this id: " + chapterId, HttpStatus.NOT_FOUND));
 
         ChapterResponseDto dto = chapterMapper.toChapterResponseDto(chapter);
+        System.out.println(dto);
         return dto;
     }
 }
