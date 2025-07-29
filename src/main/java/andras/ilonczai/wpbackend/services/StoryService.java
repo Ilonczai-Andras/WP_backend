@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,8 +71,19 @@ public class StoryService {
                     .content("Untitled content")
                     .chapterOrder(1)
                     .story(savedStory)
+                    .isPublished(false)
+                    .publishDate(null)
+                    .views(0L)
+                    .votes(0L)
+                    .commentsCount(0)
+                    .authorNotes(null)
+                    .readTimeMinutes(1)
+                    .wordCount(2)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
                     .build();
-            Chapter savedchapter = chapterRepository.save(chapter);
+            chapterRepository.save(chapter);
+
             return storyMapper.toStoryResponseDto(savedStory);
         }
 
