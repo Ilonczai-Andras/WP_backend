@@ -38,4 +38,10 @@ public class StoryController {
     public ResponseEntity<StoryResponseDto> getStory(@PathVariable Long storyId){
         return ResponseEntity.ok(storyService.getStory(storyId));
     }
+
+    @DeleteMapping("/delete-story/{storyId}")
+    public ResponseEntity<String> unfollowUser(@PathVariable Long storyId) {
+        storyService.deleteStory(storyId);
+        return ResponseEntity.ok("Story deleted successfully.");
+    }
 }

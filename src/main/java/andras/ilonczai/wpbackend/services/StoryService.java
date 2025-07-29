@@ -75,29 +75,29 @@ public class StoryService {
             return storyMapper.toStoryResponseDto(savedStory);
         }
 
-    public List<StoryResponseDto> getStories(Long authorId) {
-        List<Story> stories = storyRepository.findAllByAuthorId(authorId);
-        return stories.stream()
-                .map(story -> {
-                    // Fetch chapters for each story
-                    List<Chapter> chapters = chapterRepository.findAllByStoryIdOrderByChapterOrderAsc(story.getId());
-                    story.setChapters(chapters);
+        public List<StoryResponseDto> getStories(Long authorId) {
+            List<Story> stories = storyRepository.findAllByAuthorId(authorId);
+            return stories.stream()
+                    .map(story -> {
+                        // Fetch chapters for each story
+                        List<Chapter> chapters = chapterRepository.findAllByStoryIdOrderByChapterOrderAsc(story.getId());
+                        story.setChapters(chapters);
 
-                    // Map Story to StoryResponseDto
-                    StoryResponseDto dto = storyMapper.toStoryResponseDto(story);
+                        // Map Story to StoryResponseDto
+                        StoryResponseDto dto = storyMapper.toStoryResponseDto(story);
 
-                    // Map chapters to ChapterResponseDto
-                    List<ChapterResponseDto> chapterDtos = chapters.stream()
-                            .map(chapterMapper::toChapterResponseDto)
-                            .toList();
+                        // Map chapters to ChapterResponseDto
+                        List<ChapterResponseDto> chapterDtos = chapters.stream()
+                                .map(chapterMapper::toChapterResponseDto)
+                                .toList();
 
-                    // Set chapters to StoryResponseDto
-                    dto.setChapters(chapterDtos);
+                        // Set chapters to StoryResponseDto
+                        dto.setChapters(chapterDtos);
 
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+        }
 
         public StoryResponseDto getStory(Long storyId){
             Story story = storyRepository.findById(storyId)
@@ -113,5 +113,9 @@ public class StoryService {
 
             dto.setChapters(chapterDtos);
             return dto;
+        }
+
+        public void deleteStory(Long storyId){
+            storyRepository.deleteById(storyId);
         }
 }
