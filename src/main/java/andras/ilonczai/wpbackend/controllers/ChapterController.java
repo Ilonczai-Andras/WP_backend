@@ -24,4 +24,9 @@ public class ChapterController {
     public ResponseEntity<ChapterResponseDto> updateChapter(@Valid @PathVariable Long chapterId, @RequestBody ChapterRequestDto req){
         return ResponseEntity.ok(chapterService.updateChapter(chapterId, req));
     }
+
+    @PostMapping("/next-chapter/{chapterId}")
+    public ResponseEntity<ChapterResponseDto> createNextChapter(@Valid @PathVariable Long chapterId){
+        return ResponseEntity.ok(chapterService.createNextChapter(chapterId));
+    }
 }

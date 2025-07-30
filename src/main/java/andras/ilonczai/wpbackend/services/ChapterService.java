@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ChapterService {
@@ -37,6 +39,33 @@ public class ChapterService {
 
         chapter.setAuthorNotes(req.authorNotes());
 
+        Chapter savedChapter = chapterRepository.save(chapter);
+        return chapterMapper.toChapterResponseDto(savedChapter);
+    }
+
+    public ChapterResponseDto createNextChapter(Long chapterId){
+        Chapter lastchapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new AppException("No chapter found with this id: " + chapterId, HttpStatus.NOT_FOUND));
+
+        int nextOrder = chapterRepository.findMaxOrderByStoryId(lastchapter.getStory().getId()) + 1;
+        String newTitle = "Untitled Part " + nextOrder;
+
+        Chapter chapter = Chapter.builder()
+                .title(newTitle)
+                .content("Untitled content")
+                .chapterOrder(nextOrder)
+                .story(lastchapter.getStory())
+                .isPublished(false)
+                .publishDate(null)
+                .views(0L)
+                .votes(0L)
+                .commentsCount(0)
+                .authorNotes(null)
+                .readTimeMinutes(1)
+                .wordCount(2)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
         Chapter savedChapter = chapterRepository.save(chapter);
         return chapterMapper.toChapterResponseDto(savedChapter);
     }
