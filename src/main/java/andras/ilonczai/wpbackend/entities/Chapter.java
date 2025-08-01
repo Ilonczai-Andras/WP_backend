@@ -59,6 +59,9 @@ public class Chapter {
     @Column(name = "word_count")
     private Integer wordCount;
 
+    @Column(name = "media_url", length = 1024)
+    private String mediaUrl;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

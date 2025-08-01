@@ -9,7 +9,9 @@ import andras.ilonczai.wpbackend.repositories.ChapterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -18,6 +20,7 @@ public class ChapterService {
 
     private final ChapterRepository chapterRepository;
     private final ChapterMapper chapterMapper;
+    private final CloudinaryService cloudinaryService;
 
     public ChapterResponseDto getChapter(Long chapterId){
         Chapter chapter = chapterRepository.findById(chapterId)
@@ -27,21 +30,33 @@ public class ChapterService {
         return dto;
     }
 
-    public ChapterResponseDto updateChapter(Long chapterId, ChapterRequestDto req){
+    public ChapterResponseDto updateChapter(Long chapterId, ChapterRequestDto req, MultipartFile file) {
         Chapter chapter = chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new AppException("No chapter found with this id: " + chapterId, HttpStatus.NOT_FOUND));
 
+        String mediaUrl = null;
+
+        try {
+            if (file != null && !file.isEmpty()) {
+                mediaUrl = cloudinaryService.uploadStoryHeaderImage(file);
+            } else if (req.mediaUrl() != null && !req.mediaUrl().isBlank()) {
+                mediaUrl = req.mediaUrl().trim();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image to Cloudinary", e);
+        }
+
         chapter.setTitle(req.title());
         chapter.setContent(req.content());
-
         chapter.setPublished(req.isPublished());
         chapter.setPublishDate(req.publishDate());
-
         chapter.setAuthorNotes(req.authorNotes());
+        chapter.setMediaUrl(mediaUrl);
 
         Chapter savedChapter = chapterRepository.save(chapter);
         return chapterMapper.toChapterResponseDto(savedChapter);
     }
+
 
     public ChapterResponseDto createNextChapter(Long chapterId){
         Chapter lastchapter = chapterRepository.findById(chapterId)

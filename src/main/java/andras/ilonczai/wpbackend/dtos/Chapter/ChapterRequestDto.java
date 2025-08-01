@@ -8,5 +8,6 @@ public record ChapterRequestDto(String title,
                                 boolean isPublished,
                                 LocalDateTime publishDate,
 
-                                String authorNotes) {
+                                String authorNotes,
+                                String mediaUrl) {
 }

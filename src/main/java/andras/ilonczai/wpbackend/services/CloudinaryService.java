@@ -20,4 +20,10 @@ public class CloudinaryService {
                 ObjectUtils.asMap("folder", "profile_images"));
         return uploadResult.get("secure_url").toString();
     }
+
+    public String uploadStoryHeaderImage(MultipartFile file) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                ObjectUtils.asMap("folder", "story_header_images"));
+        return uploadResult.get("secure_url").toString();
+    }
 }

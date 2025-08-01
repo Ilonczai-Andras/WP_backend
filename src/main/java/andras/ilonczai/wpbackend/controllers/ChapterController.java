@@ -5,8 +5,10 @@ import andras.ilonczai.wpbackend.dtos.Chapter.ChapterResponseDto;
 import andras.ilonczai.wpbackend.services.ChapterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/chapters")
@@ -20,9 +22,13 @@ public class ChapterController {
         return  ResponseEntity.ok(chapterService.getChapter(chapterId));
     }
 
-    @PutMapping("/update-chapter/{chapterId}")
-    public ResponseEntity<ChapterResponseDto> updateChapter(@Valid @PathVariable Long chapterId, @RequestBody ChapterRequestDto req){
-        return ResponseEntity.ok(chapterService.updateChapter(chapterId, req));
+    @PutMapping(value = "/{chapterId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ChapterResponseDto> updateChapter(
+            @PathVariable Long chapterId,
+            @RequestPart("req") ChapterRequestDto req,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        return ResponseEntity.ok(chapterService.updateChapter(chapterId, req, file));
     }
 
     @PostMapping("/next-chapter/{chapterId}")

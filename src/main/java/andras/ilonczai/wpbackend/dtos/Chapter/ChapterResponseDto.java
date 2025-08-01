@@ -30,6 +30,8 @@ public class ChapterResponseDto {
     private Integer readTimeMinutes;
     private Integer wordCount;
 
+    private String mediaUrl;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
