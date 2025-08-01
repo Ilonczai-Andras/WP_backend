@@ -29,6 +29,11 @@ public class StoryController {
         return ResponseEntity.ok(storyService.createStory(userId, req, file));
     }
 
+    @PutMapping("{storyId}")
+    public ResponseEntity<StoryResponseDto> updateStory(@PathVariable Long storyId, @RequestBody StoryRequestDto req){
+        return ResponseEntity.ok(storyService.updateStory(storyId, req));
+    }
+
     @GetMapping("/{authorId}/stories")
     public ResponseEntity<List<StoryResponseDto>> getStories(@PathVariable Long authorId){
         return ResponseEntity.ok(storyService.getStories(authorId));

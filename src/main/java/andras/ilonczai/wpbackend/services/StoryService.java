@@ -130,4 +130,23 @@ public class StoryService {
         public void deleteStory(Long storyId){
             storyRepository.deleteById(storyId);
         }
+
+        public StoryResponseDto updateStory(Long storyId, StoryRequestDto req) {
+            Story story = storyRepository.findById(storyId)
+                    .orElseThrow(() -> new AppException("No story found with this id: " + storyId, HttpStatus.NOT_FOUND));
+
+            story.setCoverImageUrl(req.coverImageUrl());
+            story.setTitle(req.title());
+            story.setDescription(req.description());
+            story.setMainCharacters(req.mainCharacters());
+            story.setCategory(req.category());
+            story.setTags(req.tags());
+            story.setTargetAudience(req.targetAudience());
+            story.setLanguage(req.language());
+            story.setCopyright(req.copyright());
+            story.setMature(req.mature());
+
+            Story savedStory = storyRepository.save(story);
+            return storyMapper.toStoryResponseDto(savedStory);
+        }
 }
