@@ -1,9 +1,12 @@
 package andras.ilonczai.wpbackend.dtos.Readinglists;
 
+import andras.ilonczai.wpbackend.entities.ReadingListItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +19,5 @@ public class ReadingListResponseDto {
     private Long ownerId;
     private String ownerUsername;
     private int storyCount;
+    private List<ReadingListItemResponseDto> items;
 }

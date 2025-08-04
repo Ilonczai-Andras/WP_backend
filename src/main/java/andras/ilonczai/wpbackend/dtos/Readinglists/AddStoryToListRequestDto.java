@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class AddStoryToListRequestDto {
-    private Long listId;
+    private List<Long> listIds;
     private Long storyId;
 }

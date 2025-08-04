@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -44,33 +46,55 @@ public class ReadingListService {
         return readingListMapper.ReadingListToDto(savedReadingList);
     }
 
-    public void addStoryToList(AddStoryToListRequestDto req) {
-
-        ReadingList readingList = readingListRepository.findById(req.getListId())
-                .orElseThrow(() -> new AppException("Reading list not found with listId: " + req.getListId(), HttpStatus.NOT_FOUND));
-
+    public void addStoryToLists(AddStoryToListRequestDto req) {
         Story story = storyRepository.findById(req.getStoryId())
                 .orElseThrow(() -> new AppException("Story not found with storyId: " + req.getStoryId(), HttpStatus.NOT_FOUND));
 
+        List<Long> listIds = req.getListIds();
+        if (listIds == null) {
+            throw new AppException("List IDs must not be null", HttpStatus.BAD_REQUEST);
+        }
 
-        ReadingListItem readingListItem = ReadingListItem.builder()
-                .readingList(readingList)
-                .story(story)
-                .build();
-        ReadingListItem savedReadingListItem = readingListItemRepository.save(readingListItem);
+        List<ReadingListItem> existingItems = readingListItemRepository.findByStory(story);
+
+        Set<Long> requestListIds = new HashSet<>(listIds);
+
+        for (ReadingListItem item : existingItems) {
+            if (!requestListIds.contains(item.getReadingList().getId())) {
+                readingListItemRepository.delete(item);
+            }
+        }
+
+        for (Long listId : requestListIds) {
+            ReadingList readingList = readingListRepository.findById(listId)
+                    .orElseThrow(() -> new AppException("Reading list not found with listId: " + listId, HttpStatus.NOT_FOUND));
+
+            boolean exists = readingListItemRepository.existsByReadingListAndStory(readingList, story);
+            if (!exists) {
+                ReadingListItem item = ReadingListItem.builder()
+                        .readingList(readingList)
+                        .story(story)
+                        .build();
+                readingListItemRepository.save(item);
+            }
+        }
     }
 
     public List<ReadingListResponseDto> getUserLists(Long userId) {
-        List<ReadingList> list = readingListRepository.findByOwner_Id(userId);
+        List<ReadingList> readingLists = readingListRepository.findByOwner_Id(userId);
 
-        List<ReadingListResponseDto> readingListResponseDtos = list.stream()
-                .map( readingList -> {
-                    ReadingListResponseDto dto = readingListMapper.ReadingListToDto(readingList);
-                    return dto;
-                })
-                .toList();
+        return readingLists.stream().map(list -> {
+            ReadingListResponseDto dto = readingListMapper.ReadingListToDto(list);
 
-        return readingListResponseDtos;
+            List<ReadingListItemResponseDto> items = list.getItems().stream()
+                    .map(readingListMapper::ReadingListItemToDto)
+                    .toList();
+
+            dto.setItems(items);
+            dto.setStoryCount(items.size());
+
+            return dto;
+        }).toList();
     }
 
     public List<ReadingListItemResponseDto> getListItems(Long listId) {

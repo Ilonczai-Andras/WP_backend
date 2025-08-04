@@ -25,7 +25,7 @@ public class ReadingListController {
 
     @PostMapping("/add")
     public void addStory(@RequestBody AddStoryToListRequestDto req) {
-        readingListService.addStoryToList(req);
+        readingListService.addStoryToLists(req);
     }
 
     @GetMapping("{userId}")
