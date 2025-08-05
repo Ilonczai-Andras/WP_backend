@@ -108,4 +108,8 @@ public class ReadingListService {
                 .toList();
         return readingListItemResponseDtos;
     }
+
+    public void deleteReadingList(Long readingListId){
+        readingListRepository.deleteById(readingListId);
+    }
 }
