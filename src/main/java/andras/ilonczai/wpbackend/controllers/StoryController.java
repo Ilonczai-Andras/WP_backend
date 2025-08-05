@@ -29,9 +29,12 @@ public class StoryController {
         return ResponseEntity.ok(storyService.createStory(userId, req, file));
     }
 
-    @PutMapping("{storyId}")
-    public ResponseEntity<StoryResponseDto> updateStory(@PathVariable Long storyId, @RequestBody StoryRequestDto req){
-        return ResponseEntity.ok(storyService.updateStory(storyId, req));
+    @PutMapping(value = "/{storyId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<StoryResponseDto> updateStory(
+            @PathVariable Long storyId,
+            @RequestPart("req") StoryRequestDto req,
+            @RequestPart(value = "file", required = false) MultipartFile file){
+        return ResponseEntity.ok(storyService.updateStory(storyId, req, file));
     }
 
     @GetMapping("/{authorId}/stories")

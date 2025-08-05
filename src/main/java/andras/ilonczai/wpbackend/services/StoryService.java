@@ -131,11 +131,23 @@ public class StoryService {
             storyRepository.deleteById(storyId);
         }
 
-        public StoryResponseDto updateStory(Long storyId, StoryRequestDto req) {
+        public StoryResponseDto updateStory(Long storyId, StoryRequestDto req, MultipartFile file) {
             Story story = storyRepository.findById(storyId)
                     .orElseThrow(() -> new AppException("No story found with this id: " + storyId, HttpStatus.NOT_FOUND));
 
-            story.setCoverImageUrl(req.coverImageUrl());
+            String mediaUrl = null;
+
+            try {
+                if (file != null && !file.isEmpty()) {
+                    mediaUrl = cloudinaryService.uploadStoryCoverImage(file);
+                } else if (req.coverImageUrl() != null && !req.coverImageUrl().isBlank()) {
+                    mediaUrl = req.coverImageUrl().trim();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload image to Cloudinary", e);
+            }
+
+            story.setCoverImageUrl(mediaUrl);
             story.setTitle(req.title());
             story.setDescription(req.description());
             story.setMainCharacters(req.mainCharacters());
