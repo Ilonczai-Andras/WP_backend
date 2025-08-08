@@ -12,6 +12,7 @@ public interface ReadingListMapper {
 
     @Mapping(target = "ownerId", expression = "java(list.getOwner() != null ? list.getOwner().getId() : null)")
     @Mapping(target = "ownerUsername", expression = "java(list.getOwner() != null ? list.getOwner().getUserName() : null)")
+    @Mapping(target = "readingListType", source = "readingListType")
     ReadingListResponseDto ReadingListToDto (ReadingList list);
 
     @Mapping(target = "storyId", expression = "java(item.getStory() != null ? item.getStory().getId() : null)")

@@ -34,6 +34,7 @@ public class UserService {
     private final CloudinaryService cloudinaryService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final ReadingListService readingListService;
 
     public UserDto login(CredentialsDto credentialsDto){
 
@@ -77,6 +78,8 @@ public class UserService {
         userStatsRepository.save(userStats);
         userProfileRepository.save(userProfile);
         User savedUser = userRepository.save(user);
+
+        readingListService.createDefaultReadingLists(savedUser);
 
         return userMapper.toUserDto(savedUser);
     }

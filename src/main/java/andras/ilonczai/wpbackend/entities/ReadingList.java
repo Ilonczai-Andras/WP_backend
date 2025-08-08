@@ -1,5 +1,6 @@
 package andras.ilonczai.wpbackend.entities;
 
+import andras.ilonczai.wpbackend.entities.enums.ReadingListEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +29,7 @@ public class ReadingList {
 
     @OneToMany(mappedBy = "readingList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReadingListItem> items = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private ReadingListEnum readingListType;
 }

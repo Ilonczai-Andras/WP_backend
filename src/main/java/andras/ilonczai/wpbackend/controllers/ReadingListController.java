@@ -28,7 +28,7 @@ public class ReadingListController {
         readingListService.addStoryToLists(req);
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<ReadingListResponseDto>> getUserLists(@PathVariable Long userId){
         return ResponseEntity.ok(readingListService.getUserLists(userId));
     }

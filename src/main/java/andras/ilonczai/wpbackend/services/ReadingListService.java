@@ -8,12 +8,14 @@ import andras.ilonczai.wpbackend.entities.ReadingList;
 import andras.ilonczai.wpbackend.entities.ReadingListItem;
 import andras.ilonczai.wpbackend.entities.Story;
 import andras.ilonczai.wpbackend.entities.User;
+import andras.ilonczai.wpbackend.entities.enums.ReadingListEnum;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.ReadingListMapper;
 import andras.ilonczai.wpbackend.repositories.ReadingListItemRepository;
 import andras.ilonczai.wpbackend.repositories.ReadingListRepository;
 import andras.ilonczai.wpbackend.repositories.StoryRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -111,5 +113,26 @@ public class ReadingListService {
 
     public void deleteReadingList(Long readingListId){
         readingListRepository.deleteById(readingListId);
+    }
+
+    @Transactional
+    public void createDefaultReadingLists(User user) {
+        ReadingList likedList = ReadingList.builder()
+                .name("Liked reading lists")
+                .owner(user)
+                .isPrivate(true) // Usually private
+                .readingListType(ReadingListEnum.LIKED)
+                .build();
+
+        // Create user's default reading list (named after username)
+        ReadingList defaultList = ReadingList.builder()
+                .name(user.getUserName() + "'s Reading List")
+                .owner(user)
+                .isPrivate(false) // Usually public by default
+                .readingListType(ReadingListEnum.DEFAULT)
+                .build();
+
+        readingListRepository.save(likedList);
+        readingListRepository.save(defaultList);
     }
 }
