@@ -38,9 +38,21 @@ public class ReadingListController {
         return ResponseEntity.ok(readingListService.getListItems(listId));
     }
 
-    @DeleteMapping("/{readingListId}")
+    @DeleteMapping("/list/{readingListId}")
     public ResponseEntity<String> deleteReadingList(@PathVariable Long readingListId){
         readingListService.deleteReadingList(readingListId);
         return ResponseEntity.ok("Reading list deleted successfully.");
+    }
+
+    @DeleteMapping("/item/{readingListItemId}")
+    public ResponseEntity<String> deleteReadingListItem(@PathVariable Long readingListItemId){
+        readingListService.deleteReadingListItem(readingListItemId);
+        return ResponseEntity.ok("Reading list item deleted successfully.");
+    }
+
+    @DeleteMapping("/delete-all/{readingListItemId}")
+    public ResponseEntity<String> deleteAllReadingListItem(@PathVariable Long readingListItemId){
+        readingListService.deleteAllReadingListItem(readingListItemId);
+        return ResponseEntity.ok("Reading list items deleted successfully.");
     }
 }

@@ -115,6 +115,18 @@ public class ReadingListService {
         readingListRepository.deleteById(readingListId);
     }
 
+    public void deleteReadingListItem(Long readingListItemId){
+        readingListItemRepository.deleteById(readingListItemId);
+    }
+
+    public void deleteAllReadingListItem(Long readingListId){
+        List<ReadingListItem> readingListItems = readingListItemRepository.findByReadingList_Id(readingListId);
+
+        for (ReadingListItem item : readingListItems) {
+            readingListItemRepository.delete(item);
+        }
+    }
+
     @Transactional
     public void createDefaultReadingLists(User user) {
         ReadingList likedList = ReadingList.builder()

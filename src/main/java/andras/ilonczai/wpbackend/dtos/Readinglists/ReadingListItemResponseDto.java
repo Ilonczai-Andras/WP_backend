@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReadingListItemResponseDto {
+    private Long id;
     private Long storyId;
     private String title;
     private String coverImageUrl;
