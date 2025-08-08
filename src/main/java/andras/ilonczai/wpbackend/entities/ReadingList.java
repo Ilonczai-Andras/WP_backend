@@ -24,6 +24,9 @@ public class ReadingList {
     private String name;
     private boolean isPrivate;
 
+    @Column(name = "order_index", nullable = false)
+    private int orderIndex;
+
     @ManyToOne
     private User owner;
 

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ReadingListRepository extends JpaRepository<ReadingList, Long> {
     List<ReadingList> findByOwner_Id(Long ownerId);
+    List<ReadingList> findByOwner_IdOrderByOrderIndexAsc(Long userId);
 }

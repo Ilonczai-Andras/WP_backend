@@ -1,9 +1,6 @@
 package andras.ilonczai.wpbackend.controllers;
 
-import andras.ilonczai.wpbackend.dtos.Readinglists.AddStoryToListRequestDto;
-import andras.ilonczai.wpbackend.dtos.Readinglists.ReadingListItemResponseDto;
-import andras.ilonczai.wpbackend.dtos.Readinglists.ReadingListRequestDto;
-import andras.ilonczai.wpbackend.dtos.Readinglists.ReadingListResponseDto;
+import andras.ilonczai.wpbackend.dtos.Readinglists.*;
 import andras.ilonczai.wpbackend.services.ReadingListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +51,14 @@ public class ReadingListController {
     public ResponseEntity<String> deleteAllReadingListItem(@PathVariable Long readingListItemId){
         readingListService.deleteAllReadingListItem(readingListItemId);
         return ResponseEntity.ok("Reading list items deleted successfully.");
+    }
+
+    @PostMapping("/{userId}/reading-lists/reorder")
+    public ResponseEntity<String> reorderReadingLists(
+            @PathVariable Long userId,
+            @RequestBody List<ReadingListOrderUpdateDto> reorderedLists
+    ) {
+        readingListService.reorderReadingLists(userId, reorderedLists);
+        return ResponseEntity.ok("Reading list successfully reoreded");
     }
 }

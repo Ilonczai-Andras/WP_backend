@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class ReadingListResponseDto {
     private Long id;
+    private int orderIndex;
     private String name;
     private boolean isPrivate;
     private Long ownerId;

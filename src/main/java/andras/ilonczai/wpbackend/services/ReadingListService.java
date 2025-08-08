@@ -1,9 +1,6 @@
 package andras.ilonczai.wpbackend.services;
 
-import andras.ilonczai.wpbackend.dtos.Readinglists.AddStoryToListRequestDto;
-import andras.ilonczai.wpbackend.dtos.Readinglists.ReadingListItemResponseDto;
-import andras.ilonczai.wpbackend.dtos.Readinglists.ReadingListRequestDto;
-import andras.ilonczai.wpbackend.dtos.Readinglists.ReadingListResponseDto;
+import andras.ilonczai.wpbackend.dtos.Readinglists.*;
 import andras.ilonczai.wpbackend.entities.ReadingList;
 import andras.ilonczai.wpbackend.entities.ReadingListItem;
 import andras.ilonczai.wpbackend.entities.Story;
@@ -19,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +81,7 @@ public class ReadingListService {
     }
 
     public List<ReadingListResponseDto> getUserLists(Long userId) {
-        List<ReadingList> readingLists = readingListRepository.findByOwner_Id(userId);
+        List<ReadingList> readingLists = readingListRepository.findByOwner_IdOrderByOrderIndexAsc(userId);
 
         return readingLists.stream().map(list -> {
             ReadingListResponseDto dto = readingListMapper.ReadingListToDto(list);
@@ -146,5 +144,21 @@ public class ReadingListService {
 
         readingListRepository.save(likedList);
         readingListRepository.save(defaultList);
+    }
+
+    @Transactional
+    public void reorderReadingLists(Long userId, List<ReadingListOrderUpdateDto> reorderedLists) {
+        for (ReadingListOrderUpdateDto dto : reorderedLists) {
+            ReadingList list = readingListRepository
+                    .findById(dto.getId())
+                    .orElseThrow(() -> new NotFoundException("List not found"));
+
+            if (!list.getOwner().getId().equals(userId)) {
+                throw new IllegalArgumentException("List does not belong to user");
+            }
+
+            list.setOrderIndex(dto.getOrderIndex());
+            readingListRepository.save(list);
+        }
     }
 }
