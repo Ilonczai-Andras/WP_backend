@@ -71,7 +71,6 @@ public class StoryService {
                     .content("Untitled content")
                     .chapterOrder(1)
                     .story(savedStory)
-                    .isPublished(false)
                     .publishDate(null)
                     .views(0L)
                     .votes(0L)

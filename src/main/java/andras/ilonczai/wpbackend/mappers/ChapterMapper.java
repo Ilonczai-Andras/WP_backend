@@ -8,6 +8,5 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ChapterMapper {
 
-    @Mapping(target = "status", expression = "java(chapter.getStory() != null ? chapter.getStory().getStatus() : null)")
     ChapterResponseDto toChapterResponseDto(Chapter chapter);
 }

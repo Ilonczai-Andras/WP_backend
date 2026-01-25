@@ -3,6 +3,7 @@ package andras.ilonczai.wpbackend.services;
 import andras.ilonczai.wpbackend.dtos.Chapter.ChapterRequestDto;
 import andras.ilonczai.wpbackend.dtos.Chapter.ChapterResponseDto;
 import andras.ilonczai.wpbackend.entities.Chapter;
+import andras.ilonczai.wpbackend.entities.enums.StoryStatusEnum;
 import andras.ilonczai.wpbackend.exceptions.AppException;
 import andras.ilonczai.wpbackend.mappers.ChapterMapper;
 import andras.ilonczai.wpbackend.repositories.ChapterRepository;
@@ -48,9 +49,12 @@ public class ChapterService {
 
         chapter.setTitle(req.title());
         chapter.setContent(req.content());
-        chapter.setPublished(req.isPublished());
-        chapter.setPublishDate(req.publishDate());
         chapter.setAuthorNotes(req.authorNotes());
+        chapter.setStatus(req.status());
+
+        if (StoryStatusEnum.PUBLISHED.equals(req.status()) && chapter.getPublishDate() == null) {
+            chapter.setPublishDate(req.publishDate() != null ? req.publishDate() : LocalDateTime.now());
+        }
         chapter.setMediaUrl(mediaUrl);
 
         Chapter savedChapter = chapterRepository.save(chapter);
@@ -70,7 +74,6 @@ public class ChapterService {
                 .content("Untitled content")
                 .chapterOrder(nextOrder)
                 .story(lastchapter.getStory())
-                .isPublished(false)
                 .publishDate(null)
                 .views(0L)
                 .votes(0L)

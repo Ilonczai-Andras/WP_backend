@@ -19,7 +19,6 @@ public class ChapterResponseDto {
     private Integer chapterOrder;
     private StoryStatusEnum status;
 
-    private boolean isPublished;
     private LocalDateTime publishDate;
 
     private Long views;

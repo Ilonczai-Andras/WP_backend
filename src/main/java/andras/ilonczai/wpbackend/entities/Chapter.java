@@ -1,5 +1,7 @@
 package andras.ilonczai.wpbackend.entities;
 
+import andras.ilonczai.wpbackend.entities.enums.CategoryEnum;
+import andras.ilonczai.wpbackend.entities.enums.StoryStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,14 +31,14 @@ public class Chapter {
     @Column(name = "chapter_order")
     private Integer chapterOrder;
 
+    @Enumerated(EnumType.STRING)
+    private StoryStatusEnum status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "story_id", nullable = false)
     private Story story;
 
     // --- Additional fields ---
-
-    @Column(name = "is_published", nullable = false)
-    private boolean isPublished;
 
     @Column(name = "publish_date")
     private LocalDateTime publishDate;
