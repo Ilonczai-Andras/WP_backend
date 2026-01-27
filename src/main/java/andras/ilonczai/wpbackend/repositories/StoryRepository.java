@@ -1,6 +1,9 @@
 package andras.ilonczai.wpbackend.repositories;
 
 import andras.ilonczai.wpbackend.entities.Story;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +14,11 @@ import java.util.Optional;
 public interface StoryRepository extends JpaRepository<Story, Long> {
     Optional<Story> findById(Long id);
     List<Story> findAllByAuthorId(Long authorId);
+    @EntityGraph(attributePaths = {"tags", "author", "mainCharacters"})
+    Page<Story> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            String title,
+            String description,
+            Pageable pageable
+    );
 
 }

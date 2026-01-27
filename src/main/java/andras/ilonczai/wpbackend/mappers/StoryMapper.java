@@ -8,8 +8,16 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface StoryMapper {
 
+    //GET /api/stories/{id}
     @Mapping(target = "authorUsername", expression = "java(story.getAuthor().getUserName())")
     @Mapping(target = "authorId", expression = "java(story.getAuthor().getId())")
     @Mapping(target = "coverImageUrl", expression = "java(story.getCoverImageUrl())")
     StoryResponseDto toStoryResponseDto(Story story);
+
+    //GET /api/search
+    @Mapping(target = "authorUsername", expression = "java(story.getAuthor().getUserName())")
+    @Mapping(target = "authorId", expression = "java(story.getAuthor().getId())")
+    @Mapping(target = "coverImageUrl", expression = "java(story.getCoverImageUrl())")
+    @Mapping(target = "chapters", ignore = true)
+    StoryResponseDto toStorySummaryDto(Story story);
 }
