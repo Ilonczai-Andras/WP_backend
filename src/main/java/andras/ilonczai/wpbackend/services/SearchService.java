@@ -5,9 +5,11 @@ import andras.ilonczai.wpbackend.dtos.UserDto;
 import andras.ilonczai.wpbackend.dtos.Story.StoryResponseDto;
 import andras.ilonczai.wpbackend.entities.User;
 import andras.ilonczai.wpbackend.entities.Story;
+import andras.ilonczai.wpbackend.entities.UserProfile;
 import andras.ilonczai.wpbackend.entities.UserStats;
 import andras.ilonczai.wpbackend.mappers.StoryMapper;
 import andras.ilonczai.wpbackend.mappers.UserMapper;
+import andras.ilonczai.wpbackend.repositories.UserProfileRepository;
 import andras.ilonczai.wpbackend.repositories.UserRepository;
 import andras.ilonczai.wpbackend.repositories.StoryRepository;
 import andras.ilonczai.wpbackend.repositories.UserStatsRepository;
@@ -29,12 +31,13 @@ public class SearchService {
     private final UserRepository userRepository;
     private final StoryRepository storyRepository;
     private final UserStatsRepository userStatsRepository;
+    private final UserProfileRepository userProfileRepository;
 
     private final StoryMapper storyMapper;
     private final UserMapper userMapper;
 
     public SearchResponseDto search(String query, Pageable pageable) {
-
+        // 1. Start async DB calls for Users and Stories
         CompletableFuture<Page<User>> usersFuture = CompletableFuture.supplyAsync(() ->
                 userRepository.findByUserNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
                         query, query, query, pageable
@@ -59,11 +62,18 @@ public class SearchService {
                     Map<Long, UserStats> statsMap = userStatsRepository.findAllById(userIds).stream()
                             .collect(Collectors.toMap(UserStats::getId, stats -> stats));
 
+                    Map<Long, UserProfile> profileMap = userProfileRepository.findAllById(userIds).stream()
+                            .collect(Collectors.toMap(UserProfile::getId, profile -> profile));
+
                     Page<UserDto> userDtos = userPage.map(user -> {
                         UserDto dto = userMapper.toUserDto(user);
+                        Long userId = user.getId();
 
-                        Optional.ofNullable(statsMap.get(user.getId()))
+                        Optional.ofNullable(statsMap.get(userId))
                                 .ifPresent(stats -> dto.setUserStatsDto(userMapper.toUserStatsDto(stats)));
+
+                        Optional.ofNullable(profileMap.get(userId))
+                                .ifPresent(profile -> dto.setUserProfileDto(userMapper.toUserProfileDto(profile)));
 
                         return dto;
                     });
